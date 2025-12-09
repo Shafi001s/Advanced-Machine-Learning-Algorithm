@@ -13,3 +13,5 @@ tf.autograph.set_verbosity(0)
 
 X,Y = load_coffee_data();
 print(X.shape, Y.shape)
+
+plt_roast(X,Y)
