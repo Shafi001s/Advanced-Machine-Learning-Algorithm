@@ -14,7 +14,7 @@ tf.autograph.set_verbosity(0)
 X,Y = load_coffee_data();
 print(X.shape, Y.shape)
 
-plt_roast(X,Y)
+#plt_roast(X,Y)
 
 print(f"Temperature Max, Min pre normalization: {np.max(X[:,0]):0.2f}, {np.min(X[:,0]):0.2f}") # [;,0] is temperature column
 print(f"Duration Max, Min pre normalization: {np.max(X[:,1]):0.2f}, {np.min(X[:,1]):0.2f}") # [;,1] is duration column
@@ -25,3 +25,21 @@ Xn = norm_1(X) # normalize the data
 
 print(f"Temperature Max, Min post normalization: {np.max(Xn[:,0]):0.2f}, {np.min(Xn[:,0]):0.2f}") # [;,0] is temperature column
 print(f"Duration Max, Min post normalization: {np.max(Xn[:,1]):0.2f}, {np.min(Xn[:,1]):0.2f}") # [;,1] is duration column
+
+Xt = np.tile(Xn,(1000,1)) # add a column of ones for the bias term
+Yt = np.tile(Y,(1000,1)) # add a column of ones for the bias term
+print(Xt.shape, Yt.shape)
+
+
+#TensorFlow Sequential API
+
+tf.random.set_seed(1234) # for reproducibility
+model = Sequential(
+    [
+        tf.keras.Input(shape=(2,)), # input layer
+        Dense(3, activation = 'sigmoid', name = 'layer_1'),
+        Dense(1 , activation = 'sigmoid', name = 'layer_2') # hidden layer
+    ]
+)
+
+model.summary() # print the model summary
