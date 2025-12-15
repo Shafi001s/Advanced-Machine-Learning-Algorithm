@@ -43,3 +43,54 @@ model = Sequential(
 )
 
 model.summary() # print the model summary
+
+L1_num_params = 2 * 3 + 3 # weights + biases
+L2_num_params = 3 * 1 + 1 # weights + biases
+print("L1 paras = ", L1_num_params," L2 paras = ", L2_num_params)
+
+W1,b1 = model.get_layer("layer_1").get_weights() # get weights and biases
+W2,b2 = model.get_layer("layer_2").get_weights() # get weights and biases
+
+print(f"W1{W1.shape}:\n", W1, f"\nb1{b1.shape}:\n", b1)
+print(f"W2{W2.shape}:\n", W2, f"\nb2{b2.shape}:\n", b2)
+
+
+model.compile (
+    loss =tf.keras.losses.BinaryCrossentropy(),
+    optimizer = tf.keras.optimizers.Adam(learning_rate = 0.01),
+)
+
+model.fit(
+    Xt,Yt,
+    epochs = 10,
+)
+
+W1,b1 = model.get_layer("layer_1").get_weights() # get weights and biases
+W2,b2 = model.get_layer("layer_2").get_weights() # get weights and biases
+print(f"W1{W1.shape}:\n", W1, f"\nb1{b1.shape}:\n", b1)
+print(f"W2{W2.shape}:\n", W2, f"\nb2{b2.shape}:\n", b2)
+
+
+X_test = np.array([
+    [200,13.9],  # positive example
+    [200,17]])   # negative example
+
+X_testn = norm_1(X_test)
+predictions = model.predict(X_testn)
+print("predictions = \n", predictions)
+
+yhat = np.zeros_like(predictions)
+for i in range(len(predictions)):
+    if predictions[i] >= 0.5:
+        yhat[i] = 1
+    else:
+        yhat[i] = 0
+print(f"decision = \n{yhat}")
+
+yhat = (predictions >= 0.5).astype(int)
+print(f"decision = \n{yhat}")
+
+plt_layer(X,Y.reshape(-1), W1,b1,norm_1)
+plt_output_unit(W2,b2)
+netf = lambda x: model.predict(norm_1(x))
+plt_network(X, Y, netf)
