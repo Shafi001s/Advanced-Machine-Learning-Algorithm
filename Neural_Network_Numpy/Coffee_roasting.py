@@ -37,7 +37,7 @@ def my_dense(a_in, W, b):
     Returns
       a_out (ndarray (j,))  : j units|
     """
-    units = W.shape[1]
+    units = W.shape[1] # w.shape[1] 1s number of columns = number of units
     a_out = np.zeros(units)
     for j in range(units):               
         w = W[:,j] # W[:,j] taking column j                              
