@@ -48,3 +48,32 @@ model.fit(
 P_nonpreferred = model.predict(X_train)
 print(P_nonpreferred[:2])
 print("largest value", np.max(P_nonpreferred), "smallest value", np.min(P_nonpreferred))
+
+#Adding mode stable model
+preferred_model = Sequential(
+    [ 
+        Dense(25, activation = 'relu'),
+        Dense(15, activation = 'relu'),
+        Dense(4, activation = 'linear')   #<-- Note
+    ]
+)
+preferred_model.compile(
+    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),  #<-- Note
+    optimizer=tf.keras.optimizers.Adam(0.001),
+)
+
+preferred_model.fit(
+    X_train,y_train,
+    epochs=10
+)
+
+p_preferred = preferred_model.predict(X_train)
+print(f"two example output vectors:\n {p_preferred[:2]}")
+print("largest value", np.max(p_preferred), "smallest value", np.min(p_preferred))
+
+p_preferred = preferred_model.predict(X_train)
+print(f"two example output vectors:\n {p_preferred[:2]}")
+print("largest value", np.max(p_preferred), "smallest value", np.min(p_preferred))
+
+for i in range(5):
+    print( f"{p_preferred[i]}, category: {np.argmax(p_preferred[i])}")
